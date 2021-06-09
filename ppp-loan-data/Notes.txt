@@ -1,0 +1,6 @@
+Extracted data is from the PPP Loan data which was released by SBA on 03-03-2021. 
+Data will need to be updated once new tranche of data is released
+Combined and extracted using Python/Jupyter Notebook by Laura
+Added in columns at the end for analysis
+
+Updated on 05-17-2021 with updated data released by SBA on May 10, 2021
