@@ -8,6 +8,7 @@
 ├── out
 │   ├── bay_bus_from_ppp.csv
 │   └── bay_bus_from_ppp_minority.csv
+├── Notes.txt
 └── README.md
 ```
 
