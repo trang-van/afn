@@ -31,6 +31,7 @@ PATH = dirname(dirname(abspath(os.getcwd())))
 orbis_file = PATH + '/ppp-loan-data/Orbis database_six cities only.csv'
 red_rich_file = PATH + '/data-to-match/Business_database_Redwood_Richmond.csv'
 south_sf_file = PATH + '/data-to-match/Business_database_South_SF.csv'
+sf_file = PATH + '/data-to-match/Business_database_SF.csv'
 sj_file = PATH + '/data-to-match/Business_database_San_Jose.csv'
 oakland_file = PATH + '/data-to-match/Business_database_Oakland_extended.csv'
 
@@ -275,6 +276,29 @@ if __name__ == "__main__":
 
         merge_df_sj = merge_df(sj_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
         merge_df_sj.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sj_ppp_merge.csv')
+        print("done.")
+    elif args.version == 'merge-sf':
+        '''
+        Output file that merges San Francisco database with PPP Loan information
+        '''
+        print("running SF and PPP Data Merge...")
+        files = [sf_file, ppp_file]
+        sf_df, ppp_df = read_files(files)
+
+        sf_df = change_headers(sf_df)
+        sf_df.dropna(axis='columns', how='all', inplace=True)
+        sf_df.dropna(axis='rows', how='all', inplace=True)
+
+        cleanco_check()
+        sf_df = clean_names(sf_df, 'Company name Latin alphabet', 'Company Name - Clean')
+        ppp_df = clean_names(ppp_df, 'BorrowerName', 'BorrowerName - Clean')
+        print("finished cleaning names.")
+
+        print("merging...")
+        ppp_extracted = extract_columns(ppp_df, PPP_COLS)
+
+        merge_df_sf = merge_df(sf_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
+        merge_df_sf.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sf_ppp_merge.csv')
         print("done.")
 else:
     raise ValueError("Enter valid option. See help for options.")
