@@ -134,7 +134,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # TODO: Change `columns` as needed to extract necessary PPP Loan information
-    PPP_COLS = ['BorrowerName-Clean', 'CurrentApprovalAmount', 'Race', 'Ethnicity', 'Minority', 'NAICS_4', 'IndustrySubsector']
+    PPP_COLS = ['BorrowerName-Clean','CurrentApprovalAmount', 'YearApproved', 'Race', 'Ethnicity', 'Minority', 'NAICS_4','IndustrySubsector']
 
     if args.version == 'orbis-all':
         '''
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         print("getting matched names...")
 
         matched_df = match_names(orbis_df, ppp_df, 'Company Name - Clean', 'BorrowerName - Clean')
-        matched_df.to_csv(PATH + '/ppp-loan-data/out/orbis_ppp_all_bay.csv')
+        matched_df.to_csv(PATH + '/ppp-loan-data/out/orbis_ppp_all_bay.csv', index=False)
         print("done.")
     elif args.version == 'orbis-minority':
         '''
@@ -168,25 +168,25 @@ if __name__ == "__main__":
         print("getting matched names...")
 
         matched_df = match_names(orbis_df, ppp_minority_df, 'Company Name - Clean', 'BorrowerName - Clean')
-        matched_df.to_csv(PATH + '/ppp-loan-data/out/orbis_ppp_bay_minority.csv')
+        matched_df.to_csv(PATH + '/ppp-loan-data/out/orbis_ppp_bay_minority.csv', index=False)
         print("done.")
     elif args.version == 'merge-orbis-ppp':
         '''
         Output file that merges Orbis database with PPP Loan Data with specific columns.
         Businesses in the database with no PPP Loan Information will have NaN values in those fields.
         '''
-        PPP_COLS_ORBIS = ['BorrowerName-Clean', 'CurrentApprovalAmount', 'Race', 'Ethnicity', 'Minority', 'NAICS_4',
-                    'IndustrySubsector']
+        # PPP_COLS_ORBIS = ['BorrowerName-Clean', 'CurrentApprovalAmount', 'YearApproved', 'Race', 'Ethnicity', 'Minority', 'NAICS_4',
+        #             'IndustrySubsector']
 
         files = [orbis_file, PATH + '/ppp-loan-data/out/orbis_ppp_all_bay.csv']
         orbis_df, ppp_from_orbis = read_files(files)
         ppp_from_orbis.columns = ppp_from_orbis.columns.str.strip()
-        ppp_from_orbis_extracted = extract_columns(ppp_from_orbis, PPP_COLS_ORBIS)
+        ppp_from_orbis_extracted = extract_columns(ppp_from_orbis, PPP_COLS)
         orbis_df = clean_names(orbis_df, 'Company name Latin alphabet', 'Company Name - Clean')
 
         merge_df_orbis = merge_df(orbis_df, ppp_from_orbis_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
         merge_df_orbis.drop(columns=['index'], inplace=True)
-        merge_df_orbis.to_csv(PATH + '/ppp-loan-data/out/merged_cities/orbis_ppp_merge.csv')
+        merge_df_orbis.to_csv(PATH + '/ppp-loan-data/out/merged_cities/orbis_ppp_merge.csv', index=False)
     elif args.version == 'merge-oakland-ppp':
         '''
         Output file that merges Oakland database with PPP Loan information
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         print("merging...")
 
         merge_df_oakland = merge_df(oakland_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
-        merge_df_oakland.to_csv(PATH + '/ppp-loan-data/out/merged_cities/oakland_ppp_merge.csv')
+        merge_df_oakland.to_csv(PATH + '/ppp-loan-data/out/merged_cities/oakland_ppp_merge.csv', index=False)
         print("done.")
     elif args.version == 'merge-red-rich':
         '''
@@ -232,7 +232,7 @@ if __name__ == "__main__":
         print("merging...")
 
         merge_df_red_rich = merge_df(red_rich_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
-        merge_df_red_rich.to_csv(PATH + '/ppp-loan-data/out/merged_cities/redwood_richmond_ppp_merge.csv')
+        merge_df_red_rich.to_csv(PATH + '/ppp-loan-data/out/merged_cities/redwood_richmond_ppp_merge.csv', index=False)
         print("done.")
     elif args.version == 'merge-south-sf':
         '''
@@ -252,7 +252,7 @@ if __name__ == "__main__":
         print("merging...")
         ppp_extracted = extract_columns(ppp_df, PPP_COLS)
         merge_df_south_sf = merge_df(south_sf_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
-        merge_df_south_sf.to_csv(PATH + '/ppp-loan-data/out/merged_cities/south_sf_ppp_merge.csv')
+        merge_df_south_sf.to_csv(PATH + '/ppp-loan-data/out/merged_cities/south_sf_ppp_merge.csv', index=False)
         print("done.")
     elif args.version == 'merge-sj':
         '''
@@ -275,7 +275,7 @@ if __name__ == "__main__":
         ppp_extracted = extract_columns(ppp_df, PPP_COLS)
 
         merge_df_sj = merge_df(sj_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
-        merge_df_sj.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sj_ppp_merge.csv')
+        merge_df_sj.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sj_ppp_merge.csv', index=False)
         print("done.")
     elif args.version == 'merge-sf':
         '''
@@ -298,7 +298,7 @@ if __name__ == "__main__":
         ppp_extracted = extract_columns(ppp_df, PPP_COLS)
 
         merge_df_sf = merge_df(sf_df, ppp_extracted, 'Company Name - Clean', 'BorrowerName-Clean')
-        merge_df_sf.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sf_ppp_merge.csv')
+        merge_df_sf.to_csv(PATH + '/ppp-loan-data/out/merged_cities/sf_ppp_merge.csv', index=False)
         print("done.")
 else:
     raise ValueError("Enter valid option. See help for options.")
